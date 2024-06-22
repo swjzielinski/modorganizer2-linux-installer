@@ -5,7 +5,7 @@ extract="$utils/extract.sh"
 
 jdk_url='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u312-b07/OpenJDK8U-jre_x64_windows_hotspot_8u312b07.zip'
 
-mo2_url='https://github.com/ModOrganizer2/modorganizer/releases/download/v2.4.4/Mod.Organizer-2.4.4.7z'
+mo2_url='https://github.com/ModOrganizer2/modorganizer/releases/download/v2.5.0/Mod.Organizer-2.5.0.7z'
 
 winetricks_url='https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
 
@@ -16,6 +16,9 @@ executable_winetricks="$shared/winetricks"
 
 downloaded_mo2="$downloads_cache/${mo2_url##*/}"
 extracted_mo2="${downloaded_mo2%.*}"
+
+downloaded_scriptextender=""
+extracted_scriptextender=""
 
 if [ -n "$game_scriptextender_url" ]; then
 	downloaded_scriptextender="$downloads_cache/${game_nexusid}_${game_scriptextender_url##*/}"

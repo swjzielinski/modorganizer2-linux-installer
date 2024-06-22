@@ -5,14 +5,14 @@ function log_error() {
 }
 
 function get_release() {
-	if [ -z "$(command -v protontricks)" ]; then
-		if [ -n "$(command -v flatpak)" ]; then
-			if flatpak info com.github.Matoking.protontricks &> /dev/null; then
-				echo "flatpak"
-				return 0
-			fi
+	if [ -n "$(command -v flatpak)" ]; then
+		if flatpak info com.github.Matoking.protontricks &> /dev/null; then
+			echo "flatpak"
+			return 0
 		fi
-	else
+	fi
+
+	if [ -n "$(command -v protontricks)" ]; then
 		echo "system"
 		return 0
 	fi
@@ -47,12 +47,22 @@ function apply() {
 }
 
 function get_prefix() {
-	prefix=$( \
-		do_protontricks -c 'echo $WINEPREFIX' "$1" 2>/dev/null || \
-		true \
+	local visible=$(do_protontricks -l | grep -o "$1")
+	if [ -z "$visible" ]; then
+		return 0
+	fi
+
+	local stdout=$( \
+		do_protontricks -c 'echo $WINEPREFIX' "$1" || true \
 	)
-	if [ -d "$prefix" ]; then
-		echo "$prefix"
+
+	if [ -d "$stdout" ]; then
+		echo "$stdout"
+	else
+		log_error \
+			"Protontricks did not find a valid prefix directory. " \
+			"Stdout was:\n$stdout"
+		return 1
 	fi
 }
 
